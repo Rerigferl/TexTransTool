@@ -16,9 +16,29 @@ namespace net.rs64.TexTransTool.IslandSelector
         internal override BitArray IslandSelect(Island[] islands, IslandDescription[] islandDescription)
         {
             var bitArray = new BitArray(islands.Length);
+            if (RendererList.Count == 0)
+                return bitArray;
             var hash = RendererList.ToHashSet();
 
-            for (int i = 0; i < islands.Length; i += 1) { bitArray[i] = hash.Contains(islandDescription[i].Renderer); }
+            for (int i = 0; i < islands.Length; i += 1)
+            {
+                var renderer = islandDescription[i].Renderer;
+                bool flag = hash.Contains(renderer);
+#if UNITY_EDITOR && NDMF_1_6_1_OR_NEWER
+
+                if (!flag)
+                {
+                    var original = nadena.dev.ndmf.preview.NDMFPreview.GetOriginalObjectForProxy(renderer.gameObject);
+                    Debug.LogError($"{renderer.gameObject} => {original}");
+                    if (original?.TryGetComponent(out renderer) == true)
+                    {
+                        flag = hash.Contains(renderer);
+                    }
+                }
+#endif
+
+                bitArray[i] = flag;
+            }
 
             return bitArray;
         }

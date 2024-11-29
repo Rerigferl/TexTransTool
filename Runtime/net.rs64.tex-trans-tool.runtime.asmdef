@@ -27,6 +27,11 @@
             "name": "com.vrchat.base",
             "expression": "3.1.13",
             "define": "VRC_BASE"
+        },
+        {
+            "name": "nadena.dev.ndmf",
+            "expression": "1.6.1",
+            "define": "NDMF_1_6_1_OR_NEWER"
         }
     ],
     "noEngineReferences": false
